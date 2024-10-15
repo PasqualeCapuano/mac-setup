@@ -10,3 +10,13 @@
 ### In short, the script streamlines configuring both essential and optional tools for your Mac development setup.
 
 I made this on my own needs, feel free to clone this project and make it personal 🚀
+
+Give execution permissions to the script:
+```
+chmod +x setup_mac.sh
+```
+
+Then run the script:
+```
+./setup_mac.sh
+```
