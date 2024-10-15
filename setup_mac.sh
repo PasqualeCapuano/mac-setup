@@ -1,42 +1,42 @@
 #!/bin/bash
 
-# Funzione per chiedere conferma [y/N]
+# Function to ask for confirmation [y/N]
 ask_for_confirmation() {
     while true; do
         read -r -p "$1 [y/N]: " response
         case "$response" in
         [yY][eE][sS] | [yY])
-            return 0 # Risposta affermativa, esci con 0 (successo)
+            return 0 # Affirmative response, exit with 0 (success)
             ;;
         [nN][oO] | [nN] | '')
-            return 1 # Risposta negativa o vuota, esci con 1 (fallimento)
+            return 1 # Negative or empty response, exit with 1 (failure)
             ;;
         *)
-            echo "Risposta non valida. Inserisci 'y' o 'n'."
+            echo "Invalid response. Please enter 'y' or 'n'."
             ;;
         esac
     done
 }
 
-if ask_for_confirmation "Vuoi continuare con l'installazione?"; then
-    echo "Inizio installazione..."
+if ask_for_confirmation "Do you want to continue with the installation?"; then
+    echo "Starting installation..."
 else
-    echo "Installazione annullata."
+    echo "Installation cancelled."
     exit 1
 fi
 
-# Funzione per controllare se un comando esiste
+# Function to check if a command exists
 command_exists() {
     command -v "$1" &>/dev/null
 }
 
-# Installazione di Homebrew
+# Install Homebrew
 if command_exists brew; then
-    echo "Homebrew è già installato"
+    echo "Homebrew is already installed"
     echo "---------------------------------"
 
 else
-    echo "Installazione di Homebrew 🚀"
+    echo "Installing Homebrew 🚀"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>~/.zprofile
     eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -44,12 +44,12 @@ else
 
 fi
 
-# Aggiornamento di Homebrew
-echo "Aggiornamento di Homebrew 🚀"
+# Update Homebrew
+echo "Updating Homebrew 🚀"
 brew update
 echo "---------------------------------"
 
-# Lista di pacchetti da installare con Homebrew
+# List of packages to install with Homebrew
 BREW_PACKAGES=(
     git
     python
@@ -58,11 +58,11 @@ BREW_PACKAGES=(
     zsh
 )
 
-# Installazione pacchetti Homebrew
-echo "Installazione pacchetti Homebrew 🚀"
+# Install Homebrew packages
+echo "Installing Homebrew packages 🚀"
 for package in "${BREW_PACKAGES[@]}"; do
     if brew list -1 | grep -q "^${package}\$"; then
-        echo "$package è già installato"
+        echo "$package is already installed"
         echo "---------------------------------"
     else
         brew install "$package"
@@ -70,66 +70,66 @@ for package in "${BREW_PACKAGES[@]}"; do
     fi
 done
 
-# Installazione di NVM (Node Version Manager)
+# Install NVM (Node Version Manager)
 if [ -d "$HOME/.nvm" ]; then
-    echo "NVM è già installato"
+    echo "NVM is already installed"
     echo "---------------------------------"
 
 else
-    echo "Installazione di NVM 🚀"
+    echo "Installing NVM 🚀"
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
-    echo "Installazione di Node.js con NVM (LTS) 🚀"
-    nvm install --lts # Installa l'ultima versione di Node.js
+    echo "Installing Node.js with NVM (LTS) 🚀"
+    nvm install --lts # Install the latest Node.js version
 
-    if ask_for_confirmation "Vuoi usare la versione di Node.js appena installata?"; then
-        echo "Inizio installazione..."
-        nvm use --lts # Usa la versione installata di Node.js
+    if ask_for_confirmation "Do you want to use the newly installed Node.js version?"; then
+        echo "Starting installation..."
+        nvm use --lts # Use the installed Node.js version
     else
-        echo "Prosegui setup MacBook."
+        echo "Continuing MacBook setup."
         exit 1
     fi
 
     echo "---------------------------------"
 fi
 
-# Carica NVM per lo script corrente
+# Load NVM for the current script
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # Questo carica NVM
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads NVM
 
-if ask_for_confirmation "Vuoi continuare con l'installazione di librerie e pacchetti facoltativi [ZSH, NUMPY, PANDAS, ecc]?"; then
-    echo "Inizio installazione 🚀"
+if ask_for_confirmation "Do you want to continue with the installation of optional libraries and packages [ZSH, NUMPY, PANDAS, etc]?"; then
+    echo "Starting installation 🚀"
     echo "---------------------------------"
 
     # Spotify
-    echo "Installazione di Spotify 🚀"
+    echo "Installing Spotify 🚀"
     brew install --cask spotify
     echo "---------------------------------"
 
     # Stats
-    echo "Installazione di Stats 🚀"
+    echo "Installing Stats 🚀"
     brew install stats
     echo "---------------------------------"
 
     # Rectangle
-    echo "Installazione di Rectangle 🚀"
+    echo "Installing Rectangle 🚀"
     brew install --cask rectangle
     echo "---------------------------------"
 
     # Hiddenbar
-    echo "Installazione di Hiddenbar 🚀"
+    echo "Installing Hiddenbar 🚀"
     brew install --cask hiddenbar
     echo "---------------------------------"
 
     # Oh-My-Zsh
     if [ -d "$HOME/.oh-my-zsh" ]; then
-        echo "Oh-My-Zsh è già installato"
+        echo "Oh-My-Zsh is already installed"
         echo "---------------------------------"
     else
-        echo "Installazione di Oh-My-Zsh 🚀"
+        echo "Installing Oh-My-Zsh 🚀"
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     fi
 
-    # Installazione di librerie Python globali (usando pip)
+    # Install global Python libraries (using pip)
     PYTHON_PACKAGES=(
         virtualenv
         requests
@@ -140,16 +140,16 @@ if ask_for_confirmation "Vuoi continuare con l'installazione di librerie e pacch
     for package in "${PYTHON_PACKAGES[@]}"; do
         pip3 show "$package" &>/dev/null
         if [ $? -eq 0 ]; then
-            echo "$package è già installato"
+            echo "$package is already installed"
             echo "---------------------------------"
         else
             pip3 install "$package"
         fi
     done
 else
-    echo "Installazione annullata."
+    echo "Installation cancelled."
     exit 1
 fi
 
-# Setup completato
-echo "Setup completato! 🎉"
+# Setup completed
+echo "Setup completed! 🎉"
