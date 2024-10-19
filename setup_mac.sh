@@ -96,7 +96,7 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads NVM
 
-if ask_for_confirmation "Do you want to continue with the installation of optional libraries and packages [ZSH, NUMPY, PANDAS, etc]?"; then
+if ask_for_confirmation "Do you want to continue with the installation of optional libraries and packages?"; then
     echo "Starting installation 🚀"
     echo "---------------------------------"
 
